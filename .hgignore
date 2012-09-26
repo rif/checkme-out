@@ -1,0 +1,18 @@
+syntax: glob
+*~
+*.pyc
+*.pyo
+*.bak
+*.bak2
+cache/
+private/
+uploads/
+databases/
+sessions/
+errors/
+.settings
+*project
+*workspace
+httpserver.pid
+httpserver.log
+parameters_8000.py
