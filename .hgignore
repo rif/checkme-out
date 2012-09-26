@@ -10,6 +10,7 @@ uploads/
 databases/
 sessions/
 errors/
+.sass-cache/
 .settings
 *project
 *workspace

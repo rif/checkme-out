@@ -21,8 +21,8 @@ else:
 ## none otherwise. a pattern can be 'controller/function.extension'
 response.generic_patterns = ['*'] if request.is_local else []
 ## (optional) optimize handling of static files
-response.optimize_css = 'concat,minify,inline'
-response.optimize_js = 'concat,minify,inline'
+#response.optimize_css = 'concat,minify,inline'
+#response.optimize_js = 'concat,minify,inline'
 
 from gluon.tools import Auth, Crud, Service, PluginManager, prettydate
 from datetime import date

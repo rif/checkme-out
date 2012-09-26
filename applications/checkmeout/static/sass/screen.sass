@@ -1,0 +1,19 @@
+$star-height: 25px
+
+.star-rating s
+  color: #c3c3c3
+  font-size: $star-height
+  cursor: default
+  text-decoration: none
+  line-height: $star-height
+  &:hover
+    color: indianred
+
+.star-rating
+  padding: 2px
+
+.star-rating s:hover:before
+  content: "\2665"
+
+.star-rating s:before
+  content: "\2665"

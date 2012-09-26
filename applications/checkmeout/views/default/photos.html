@@ -17,3 +17,14 @@
 
 <h2>{{=T('Add more')}}</h2>
 {{=form}}
+
+<div class="star-rating"><s><s><s><s><s><s></s></s></s></s></s></s></div>
+
+<script type="text/javascript">
+  $(function() {
+  $("div.star-rating > s").on("click", function(e) {
+  var numStars = $(e.target).parentsUntil("div").length+1;
+  alert(numStars + (numStars == 1 ? " star" : " stars!"));
+  });
+});
+</script>

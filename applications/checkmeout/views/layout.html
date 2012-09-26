@@ -44,7 +44,12 @@
   response.files.append(URL('static','css/bootstrap.min.css'))
   response.files.append(URL('static','css/bootstrap-responsive.min.css'))
   response.files.append(URL('static','css/web2py_bootstrap.css'))
+  response.files.append(URL('static','css/screen.css'))
   }}
+
+  <!--[if IE]>
+      <link href="{{=URL('static','css/ie.css')}}" rel="stylesheet" type="text/css" />
+  <![endif]-->
 
   {{include 'web2py_ajax.html'}}
 

@@ -1,0 +1,1 @@
+.star-rating s{color:#c3c3c3;font-size:25px;cursor:default;text-decoration:none;line-height:25px}.star-rating s:hover{color:#cd5c5c}.star-rating{padding:2px}.star-rating s:hover:before{content:"\2665"}.star-rating s:before{content:"\2665"}
