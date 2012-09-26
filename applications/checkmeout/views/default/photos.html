@@ -1,0 +1,19 @@
+{{extend 'layout.html'}}
+
+<h1>{{=T('Your photos')}}</h1>
+
+<ul class="thumbnails">
+  {{for pic in photos:}}
+  <div class="pic">
+    <li class="span2">
+      <a class="thumbnail" href="{{=URL('default','photos', args=pic.id)}}">
+        <img src="{{=URL('download',args=pic.photo)}}" alt="{{=pic.title}}"/>
+      </a>
+      <h5>{{=pic.title}}</h5>
+    </li>
+  </div>
+  {{pass}}
+</ul>
+
+<h2>{{=T('Add more')}}</h2>
+{{=form}}

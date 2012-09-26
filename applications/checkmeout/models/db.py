@@ -21,16 +21,16 @@ else:
 ## none otherwise. a pattern can be 'controller/function.extension'
 response.generic_patterns = ['*'] if request.is_local else []
 ## (optional) optimize handling of static files
-#response.optimize_css = 'concat,minify,inline'
-#response.optimize_js = 'concat,minify,inline'
+response.optimize_css = 'concat,minify,inline'
+response.optimize_js = 'concat,minify,inline'
 
 from gluon.tools import Auth, Crud, Service, PluginManager, prettydate
-auth = Auth(db)
 from datetime import date
+auth = Auth(db)
 auth.settings.extra_fields['auth_user']= [
     Field('country'),
     Field('location'),
-    Field('birthday', 'date', default=date(1978,7,10)),
+    Field('birth_date', 'date', default=date(1978,7,10)),
     Field('sex', requires=IS_IN_SET((T('Male'), T('Female')))),
 ]
 
@@ -55,11 +55,14 @@ auth.settings.reset_password_requires_verification = True
 from gluon.contrib.login_methods.rpx_account import use_janrain
 use_janrain(auth,filename='private/janrain.key')
 
-Pictures = db.define_table('picture',
-                           Field('title'),
-                           Field('user', 'reference auth_user'),
-                           Field('img', 'upload'),
-                           format='%(title)s'
+
+Photos = db.define_table('photo',
+                         Field('title'),
+                         Field('user', 'reference auth_user',
+                               readable=False, writable=False,
+                               default=auth.user_id),
+                         Field('photo', 'upload'),
+                         format='%(title)s'
 )
 
 Contests = db.define_table('contest',
@@ -87,3 +90,5 @@ Votes = db.define_table('vote',
 
 ## after defining tables, uncomment below to enable auditing
 # auth.enable_record_versioning(db)
+
+a0, a1 = request.args(0), request.args(1)
