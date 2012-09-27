@@ -11,7 +11,7 @@ def profile():
 @auth.requires_login()
 def photos():
     form = crud.update(Photos, a0)
-    photos = db(Photos.user==auth.user_id).select()
+    photos = db(Photos.user==auth.user_id).select(cacheable=True)
     return locals()
 
 def user():

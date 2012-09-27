@@ -75,11 +75,14 @@ Contests = db.define_table('contest',
                            Field('max_age', 'integer'),
                            Field('admission_deadline', 'datetime'),
                            Field('voting_deadline', 'datetime'),
+                           auth.signature,
                            format='%(name)s'
 )
 
 Votes = db.define_table('vote',
-                        Field('picture', 'reference picture',
+                        Field('voter', 'reference auth_user',
+                              default=auth.user_id),
+                        Field('photo', 'reference photo',
                               required=True, notnull=True),
                         Field('contest', 'reference contest',
                               requires=IS_EMPTY_OR(IS_IN_DB(db,db.contest.id))),
