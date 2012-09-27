@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
 def index():
-    response.flash = T("Welcome to web2py!")
-    return dict(message=T('Hello World'))
+    users = db(db.auth_user).select(cacheable=True)
+    return locals()
 
 
-def profile():
+def photos():
     a0 = request.args(0, cast=int, otherwise=URL('index'))
     photos = db(Photos.user==a0).select(cacheable=True)
-    user = photos.first().user
+    user = photos.first().user if len(photos) else db.auth_user(a0)
     return locals()
 
 @auth.requires_login()
-def photos():
+def profile():
     form = crud.update(Photos, a0)
     photos = db(Photos.user==auth.user_id).select(cacheable=True)
     return locals()

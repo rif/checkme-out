@@ -26,6 +26,7 @@ response.generic_patterns = ['*'] if request.is_local else []
 
 from gluon.tools import Auth, Crud, Service, PluginManager, prettydate
 from datetime import date
+from smarthumb import SMARTHUMB
 auth = Auth(db)
 auth.settings.extra_fields['auth_user']= [
     Field('country'),
@@ -62,6 +63,9 @@ Photos = db.define_table('photo',
                                readable=False, writable=False,
                                default=auth.user_id),
                          Field('photo', 'upload'),
+                         Field("thumbnail", "upload",
+                               readable=False, writable=False,
+                               compute=lambda row: SMARTHUMB(row.photo, (100, 100))),
                          format='%(title)s'
 )
 
