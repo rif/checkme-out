@@ -5,7 +5,9 @@ def index():
 
 
 def profile():
-    u = db.auth_user(a0, cast=int, otherwise=URL('index')) or redirect(URL('index'))
+    a0 = request.args(0, cast=int, otherwise=URL('index'))
+    photos = db(Photos.user==a0).select(cacheable=True)
+    user = photos.first().user
     return locals()
 
 @auth.requires_login()
