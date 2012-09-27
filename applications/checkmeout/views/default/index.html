@@ -1,16 +1,19 @@
 {{left_sidebar_enabled,right_sidebar_enabled=False,('message' in globals())}}
 {{extend 'layout.html'}}
 
-<ul>
-{{for user in users:}}
-<li>
-  <a href="{{=URL('default','photos', args=user.id)}}">
-    {{='%(first_name)s %(last_name)s' % user}}
-    {{photo = db(Photos.user==user.id).select(cacheable=True).first()}}
-    {{if photo:}}
-    <img src="{{=URL('download', args=photo.thumbnail)}}" alt="" />
+<table class="table table-bordered">
+<tbody>
+{{for r in rows:}}
+<tr>
+  <td>
+  <a href="{{=URL('default','photos', args=r.auth_user.id)}}">
+    {{='%(first_name)s %(last_name)s' % r.auth_user}}
+    {{if r.photo:}}
+    <img src="{{=URL('download', args=r.photo.thumbnail)}}" alt="" />
     {{pass}}
   </a>
-</li>
+  </td>
+</tr>
 {{pass}}
-<ul>
+</tbody>
+</table>

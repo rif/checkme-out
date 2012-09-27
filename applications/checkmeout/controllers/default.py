@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 def index():
-    users = db(db.auth_user).select(cacheable=True)
+    rows = db(db.photo.user==db.auth_user.id).select(
+        groupby=db.auth_user.id,
+        cacheable=True)
     return locals()
 
 
