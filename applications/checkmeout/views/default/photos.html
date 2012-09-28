@@ -3,45 +3,105 @@
 <h1>{{="%(first_name)s %(last_name)s" % user}}</h1>
 
 {{block head}}
-<!--[if lt IE 7]><link rel="stylesheet" href="http://blueimp.github.com/cdn/css/bootstrap-ie6.min.css"><![endif]-->
-<link rel="stylesheet" href="{{=URL('static','css/bootstrap-image-gallery.min.css')}}"/> 
+<link rel="stylesheet" href="{{=URL('static','css/basic.css')}}" type="text/css')}}" />
+<link rel="stylesheet" href="{{=URL('static','css/galleriffic-2.css')}}" type="text/css')}}" />
 {{end}}
 
-<div id="gallery" data-toggle="modal-gallery" data-target="#modal-gallery">
-  {{for pic in photos:}}
-  <a rel="gallery" href="{{=URL('download',args=pic.photo)}}" title="{{=pic.title}}">
-    <img src="{{=URL('download',args=pic.thumbnail)}}">
-  </a>
-  {{pass}}
+<div class="container">
+<div id="gallery" class="content">
+  <div id="controls" class="controls"></div>
+  <div class="slideshow-container">
+    <div id="loading" class="loader"></div>
+    <div id="slideshow" class="slideshow"></div>
+  </div>
+  <div id="caption" class="caption-container"></div>
 </div>
 
-<div id="modal-gallery" class="modal modal-gallery hide fade">
-    <div class="modal-header">
-        <a class="close" data-dismiss="modal">&times;</a>
-        <h3 class="modal-title"></h3>
-    </div>
-    <div class="modal-body"><div class="modal-image"></div></div>
-    <div class="modal-footer">
-      <div class="star-rating">
-        <b>{{=T('Rate it')}}: </b><s><s><s><s><s><s></s></s></s></s></s></s>
-      </div>
-        <a class="btn btn-primary modal-next">Next <i class="icon-arrow-right icon-white"></i></a>
-        <a class="btn btn-info modal-prev"><i class="icon-arrow-left icon-white"></i> Previous</a>
-        <a class="btn btn-success modal-play modal-slideshow" data-slideshow="5000"><i class="icon-play icon-white"></i> Slideshow</a>
-        <a class="btn modal-download" target="_blank"><i class="icon-download"></i> Download</a>
-    </div>
+<div id="thumbs" class="navigation">
+    <ul class="thumbs noscript">
+      {{for pic in photos:}}
+        <li>
+            <a class="thumb" name="optionalCustomIdentifier" href="{{=URL('download',args=pic.photo)}}" title="{{=pic.title}}">
+                <img src="{{=URL('download',args=pic.thumbnail)}}" alt="{{=pic.title}}" />
+            </a>
+	    <div class="caption">
+	      <div class="download">
+		<a href="{{=URL('download',args=pic.photo)}}">Download Original</a>
+	      </div>
+	      <div class="image-title">{{=pic.title}}</div>
+	      <div class="image-desc">Description</div>
+	      <div class="star-rating">
+		<b>{{=T('Rate it')}}: </b><s><s><s><s><s><s></s></s></s></s></s></s>
+	      </div>
+	    </div>
+        </li>
+	{{pass}}
+    </ul>
 </div>
-
+</div>
 {{block scripts}}
-<script src="{{=URL('static', 'js/load-image.min.js')}}"></script>
-<script src="{{=URL('static',
-             'js/bootstrap-image-gallery.min.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/jquery.galleriffic.js')}}"></script>
+<script type="text/javascript" src="{{=URL('static', 'js/jquery.opacityrollover.js')}}"></script>
 <script type="text/javascript">
+  <!-- We only want the thunbnails to display when javascript is disabled -->
+  document.write('<style>.noscript { display: none; }</style>');
+  
   $(function() {
-  $("div.star-rating > s").on("click", function(e) {
-  var numStars = $(e.target).parentsUntil("div").length+1;
-  $(this).parent().text(numStars + (numStars == 1 ? " star" : " stars!")).removeClass("star-rating");
-  });
+	// We only want these styles applied when javascript is enabled
+	$('div.navigation').css({'width' : '300px', 'float' : 'left'});
+	$('div.content').css('display', 'block');
+
+	// Initially set opacity on thumbs and add
+	// additional styling for hover effect on thumbs
+	var onMouseOutOpacity = 0.67;
+	$('#thumbs ul.thumbs li').opacityrollover({
+		mouseOutOpacity:   onMouseOutOpacity,
+		mouseOverOpacity:  1.0,
+		fadeSpeed:         'fast',
+		exemptionSelector: '.selected'
+	});
+	
+	// Initialize Advanced Galleriffic Gallery
+	var gallery = $('#thumbs').galleriffic({
+		delay:                     2500,
+		numThumbs:                 15,
+		preloadAhead:              10,
+		enableTopPager:            true,
+		enableBottomPager:         true,
+		maxPagesToShow:            7,
+		imageContainerSel:         '#slideshow',
+		controlsContainerSel:      '#controls',
+		captionContainerSel:       '#caption',
+		loadingContainerSel:       '#loading',
+		renderSSControls:          true,
+		renderNavControls:         true,
+		playLinkText:              'Play Slideshow',
+		pauseLinkText:             'Pause Slideshow',
+		prevLinkText:              '&lsaquo; Previous Photo',
+		nextLinkText:              'Next Photo &rsaquo;',
+		nextPageLinkText:          'Next &rsaquo;',
+		prevPageLinkText:          '&lsaquo; Prev',
+		enableHistory:             false,
+		autoStart:                 false,
+		syncTransitions:           true,
+		defaultTransitionDuration: 900,
+		onSlideChange:             function(prevIndex, nextIndex) {
+			// 'this' refers to the gallery, which is an extension of $('#thumbs')
+			this.find('ul.thumbs').children()
+				.eq(prevIndex).fadeTo('fast', onMouseOutOpacity).end()
+				.eq(nextIndex).fadeTo('fast', 1.0);
+		},
+		onPageTransitionOut:       function(callback) {
+			this.fadeTo('fast', 0.0, callback);
+		},
+		onPageTransitionIn:        function() {
+			this.fadeTo('fast', 1.0);
+		}
+	});
+  	$("div.star-rating > s").on("click", function(e) {
+  		var numStars = $(e.target).parentsUntil("div").length+1;
+  		$(this).parent().text(numStars + (numStars == 1 ? " star" : " stars!")).removeClass("star-rating");  
+  	});
 });
 </script>
 {{end}}

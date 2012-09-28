@@ -174,8 +174,7 @@ class TextWidget(FormWidget):
         """
 
         default = dict(value = value)
-        attr = cls._attributes(field, default,
-                               **attributes)
+        attr = cls._attributes(field, default,**attributes)
         return TEXTAREA(**attr)
 
 
@@ -380,12 +379,11 @@ class CheckboxesWidget(OptionsWidget):
         requires = field.requires
         if not isinstance(requires, (list, tuple)):
             requires = [requires]
-        if requires:
-            if hasattr(requires[0], 'options'):
-                options = requires[0].options()
-            else:
-                raise SyntaxError, 'widget cannot determine options of %s' \
-                    % field
+        if requires and hasattr(requires[0], 'options'):
+            options = requires[0].options()
+        else:
+            raise SyntaxError, 'widget cannot determine options of %s' \
+                % field
 
         options = [(k, v) for k, v in options if k != '']
         opts = []
@@ -1023,11 +1021,11 @@ class SQLFORM(FORM):
                 else:
                     inp = field.formatter(default)
             elif field.type == 'upload':
-                if hasattr(field, 'widget') and field.widget:
+                if field.widget:
                     inp = field.widget(field, default, upload)
                 else:
                     inp = self.widgets.upload.widget(field, default, upload)
-            elif hasattr(field, 'widget') and field.widget:
+            elif field.widget:
                 inp = field.widget(field, default)
             elif field.type == 'boolean':
                 inp = self.widgets.boolean.widget(field, default)
@@ -1143,16 +1141,16 @@ class SQLFORM(FORM):
             if defaults and len(args) - len(defaults) == 4 or len(args) == 4:
                 table = TABLE()
                 for id,a,b,c in xfields:
-                    raw_b = self.field_parent[id] = b
-                    newrows = formstyle(id,a,raw_b,c)
+                    newrows = formstyle(id,a,b,c)
+                    self.field_parent[id] = b.parent
                     if type(newrows).__name__ != "tuple":
                         newrows = [newrows]
                     for newrow in newrows:
                         table.append(newrow)
             else:
-                for id,a,b,c in xfields:
-                    self.field_parent[id] = b
                 table = formstyle(self, xfields)
+                for id,a,b,c in xfields:
+                    self.field_parent[id] = b.parent
         else:
             raise RuntimeError, 'formstyle not supported'
         return table
@@ -1278,21 +1276,22 @@ class SQLFORM(FORM):
                 if not field.widget and field.type.startswith('list:') and \
                         not OptionsWidget.has_options(field):
                     field.widget = self.widgets.list.widget
-                if hasattr(field, 'widget') and field.widget and fieldname in request_vars:
+                if field.widget and fieldname in request_vars:
                     if fieldname in self.vars:
                         value = self.vars[fieldname]
                     elif self.record:
                         value = self.record[fieldname]
                     else:
                         value = self.table[fieldname].default
-                    if field.type.startswith('list:') and \
-                            isinstance(value, str):
+                    if field.type.startswith('list:') and isinstance(value, str):
                         value = [value]
                     row_id = '%s_%s%s' % (self.table, fieldname, SQLFORM.ID_ROW_SUFFIX)
                     widget = field.widget(field, value)
-                    self.field_parent[row_id].components = [ widget ]
-                    self.field_parent[row_id]._traverse(False, hideerror)
-                    self.custom.widget[ fieldname ] = widget
+                    parent = self.field_parent[row_id]
+                    if parent:
+                        parent.components = [ widget ]
+                        parent._traverse(False, hideerror)
+                    self.custom.widget[fieldname] = widget
             self.accepted = ret
             return ret
 
@@ -1927,7 +1926,7 @@ class SQLFORM(FORM):
                 search_widget = search_widget[tablename]
             if search_widget=='default':
                 search_menu = SQLFORM.search_menu(sfields)
-                search_widget = lambda sfield, url: CAT(add,FORM(
+                search_widget = lambda sfield, url: CAT(FORM(
                     INPUT(_name='keywords',_value=request.vars.keywords,
                           _id='web2py_keywords',_onfocus="jQuery('#w2p_query_fields').change();jQuery('#w2p_query_panel').slideDown();"),
                     INPUT(_type='submit',_value=T('Search'),_class="btn"),
@@ -1935,6 +1934,7 @@ class SQLFORM(FORM):
                           _onclick="jQuery('#web2py_keywords').val('');"),
                     _method="GET",_action=url),search_menu)
             form = search_widget and search_widget(sfields,url()) or ''
+            console.append(add)
             console.append(form)
             keywords = request.vars.get('keywords','')
             try:
@@ -1979,8 +1979,7 @@ class SQLFORM(FORM):
             if columns and not str(field) in columns: continue
             if not field.readable: continue
             key = str(field)
-            header = headers.get(str(field),
-                                 hasattr(field,'label') and field.label or key)
+            header = headers.get(str(field), field.label or key)
             if sortable:
                 if key == order:
                     key, marker = '~'+order, sorter_icons[0]
