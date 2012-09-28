@@ -40,5 +40,6 @@ def SMARTHUMB(image, box, fit=True, name="thumb"):
 
         root, ext = os.path.splitext(image)
         thumb = '%s_%s%s' % (root, name, ext)
+
         img.save(request.folder + 'uploads/' + thumb)
         return thumb

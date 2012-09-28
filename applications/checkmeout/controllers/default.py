@@ -12,9 +12,9 @@ def photos():
     user = photos.first().user if len(photos) else db.auth_user(a0)
     return locals()
 
-@auth.requires_login()
+@auth.requires_signature()
 def profile():
-    form = crud.update(Photos, a0)
+    photo_form = crud.update(Photos, a0)
     photos = db(Photos.user==auth.user_id).select(cacheable=True)
     return locals()
 

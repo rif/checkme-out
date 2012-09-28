@@ -18,5 +18,6 @@ response.meta.generator = 'Web2py Web Framework'
 response.google_analytics_id = None
 
 response.menu = [
-    (T('Home'), False, URL('default','index'), [])
+    (T('Home'), False, URL('default','index'), []),
+    (T('Your profile'), False, URL('default','profile', user_signature=True), [])
     ]

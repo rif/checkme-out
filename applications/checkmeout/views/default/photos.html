@@ -8,39 +8,43 @@
 {{end}}
 
 <div id="page">
-	<div class="container">
-		<div id="gallery" class="content">
-		  <div id="controls" class="controls"></div>
-		  <div class="slideshow-container">
-		    <div id="loading" class="loader"></div>
-		    <div id="slideshow" class="slideshow"></div>
-		  </div>
-		  <div id="caption" class="caption-container"></div>
+			<div id="container">
+				<h1>{{='%(first_name)s %(last_name)s'%user}}</h1>
+				<h2>{{=user.sex}}, {{=user.country}}, {{=user.location}}</h2>
+				<!-- Start Advanced Gallery Html Containers -->
+				<div id="gallery" class="content">
+					<div id="controls" class="controls"></div>
+					<div class="star-rating">
+				  <b>{{=T('Rate it')}}: </b><s><s><s><s><s><s></s></s></s></s></s></s>
+				</div>
+					<div class="slideshow-container">
+						<div id="loading" class="loader"></div>
+						<div id="slideshow" class="slideshow"></div>
+					</div>
+					<div id="caption" class="caption-container"></div>
+				</div>
+				<div id="thumbs" class="navigation">
+					<ul class="thumbs noscript">
+						{{for pic in photos:}}
+						<li>
+							<a class="thumb" name="leaf" href="{{=URL('download',args=pic.photo)}}" title="{{=pic.title}}">
+								<img src="{{=URL('download',args=pic.thumbnail)}}" alt="{{=pic.title}}" />
+							</a>
+							<div class="caption">
+								<div class="download">
+									<a href="{{=URL('download',args=pic.photo)}}">Download Original</a>
+								</div>
+								<div class="image-title">{{=pic.title}}</div>
+								<div class="image-desc">Description</div>
+								
+							</div>
+						</li>
+						{{pass}}
+					</ul>
+				</div>
+				<div style="clear: both;"></div>
+			</div>
 		</div>
-
-		<div id="thumbs" class="navigation">
-		    <ul class="thumbs noscript">
-		      {{for pic in photos:}}
-		        <li>
-		            <a class="thumb" name="optionalCustomIdentifier" href="{{=URL('download',args=pic.photo)}}" title="{{=pic.title}}">
-		                <img src="{{=URL('download',args=pic.thumbnail)}}" alt="{{=pic.title}}" />
-		            </a>
-			    <div class="caption">
-			      <div class="download">
-				<a href="{{=URL('download',args=pic.photo)}}">Download Original</a>
-			      </div>
-			      <div class="image-title">{{=pic.title}}</div>
-			      <div class="image-desc">Description</div>
-			      <div class="star-rating">
-				<b>{{=T('Rate it')}}: </b><s><s><s><s><s><s></s></s></s></s></s></s>
-			      </div>
-			    </div>
-		        </li>
-			{{pass}}
-		    </ul>
-		</div>
-	</div>
-</div>
 {{block scripts}}
 <script type="text/javascript" src="{{=URL('static', 'js/jquery.galleriffic.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/jquery.opacityrollover.js')}}"></script>
@@ -49,6 +53,8 @@
   document.write('<style>.noscript { display: none; }</style>');
   
   $(function() {
+       
+
 	// We only want these styles applied when javascript is enabled
 	$('div.navigation').css({'width' : '300px', 'float' : 'left'});
 	$('div.content').css('display', 'block');
@@ -99,12 +105,12 @@
 		onPageTransitionIn:        function() {
 			this.fadeTo('fast', 1.0);
 		}
-	});
-  	$("div.star-rating > s").on("click", function(e) {
-  		var numStars = $(e.target).parentsUntil("div").length+1;
-  		$(this).parent().text(numStars + (numStars == 1 ? " star" : " stars!")).removeClass("star-rating");  
-  	});
-});
+	});  	
+  $("div.star-rating > s").click(function(e) {
+  var numStars = $(e.target).parentsUntil("div").length+1;
+  $(this).parent().text(numStars + (numStars == 1 ? " star" : " stars!")).removeClass("star-rating");  
+  });
+  });
 </script>
 {{end}}
 

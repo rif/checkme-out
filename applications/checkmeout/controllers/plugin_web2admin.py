@@ -30,7 +30,7 @@ def  view_table():
                              orderby = plugins.web2admin.orderby.get(table),
                              maxtextlength = plugins.web2admin.maxtextlength.get(table) or 20,
                              maxtextlengths = plugins.web2admin.maxtextlengths,
-                             showbuttontext=plugins.web2admin.showbuttontext,
+                             showbuttontext=Falseplugins.web2admin.showbuttontext,
     )
     w2a_filters = []
     for fltr in plugins.web2admin.filters:        

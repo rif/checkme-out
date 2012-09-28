@@ -1,3 +1,19 @@
 {{extend 'layout.html'}}
+<h1>{{=T('Your photos')}}</h1>
 
-{{=LOAD('default', 'profile.load', ajax=False)}}
+<ul class="thumbnails">
+  {{for pic in photos:}}
+  <div class="pic">
+    <li class="span1">
+      <a class="thumbnail" href="{{=URL('default','profile', args=pic.id, user_signature=True)}}">
+        <img src="{{=URL('download',args=pic.thumbnail)}}" alt="{{=pic.title}}"/>
+      </a>
+      <span class="title">{{=pic.title}}</span>
+    </li>
+  </div>
+  {{pass}}
+</ul>
+
+<h2>{{=T('Add more')}}</h2>
+{{=photo_form}}
+

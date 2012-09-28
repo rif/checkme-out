@@ -26,7 +26,7 @@ response.generic_patterns = ['*'] if request.is_local else []
 
 from gluon.tools import Auth, Crud, Service, PluginManager, prettydate
 from datetime import date
-from smarthumb import SMARTHUMB
+
 auth = Auth(db)
 auth.settings.extra_fields['auth_user']= [
     Field('country'),
@@ -56,9 +56,11 @@ auth.settings.reset_password_requires_verification = True
 from gluon.contrib.login_methods.rpx_account import use_janrain
 use_janrain(auth,filename='private/janrain.key')
 
+from smarthumb import SMARTHUMB
 
 Photos = db.define_table('photo',
                          Field('title'),
+                         Field('description'),
                          Field('user', 'reference auth_user',
                                readable=False, writable=False,
                                default=auth.user_id),
