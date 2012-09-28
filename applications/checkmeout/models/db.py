@@ -101,3 +101,17 @@ Votes = db.define_table('vote',
 # auth.enable_record_versioning(db)
 
 a0, a1 = request.args(0), request.args(1)
+
+def calculate_age(row):
+    born = row.auth_user.birth_date
+    today = date.today()
+    try: # raised when birth date is February 29 and the current year is not a leap year
+        birthday = born.replace(year=today.year)
+    except ValueError:
+        birthday = born.replace(year=today.year, day=born.day-1)
+    if birthday > today:
+        return today.year - born.year - 1
+    else:
+        return today.year - born.year
+
+db.auth_user.age = Field.Lazy(calculate_age)

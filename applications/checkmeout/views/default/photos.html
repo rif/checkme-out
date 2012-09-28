@@ -10,7 +10,7 @@
 <div id="page">
 			<div id="container">
 				<h1>{{='%(first_name)s %(last_name)s'%user}}</h1>
-				<h2>{{=user.sex}}, {{=user.country}}, {{=user.location}}</h2>
+				<h5>{{=user.sex}} {{=user.age()}}, {{=user.location}} - {{=user.country}}</h5>
 				<!-- Start Advanced Gallery Html Containers -->
 				<div id="gallery" class="content">
 					<div id="controls" class="controls"></div>
