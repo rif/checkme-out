@@ -7,37 +7,39 @@
 <link rel="stylesheet" href="{{=URL('static','css/galleriffic-2.css')}}" type="text/css')}}" />
 {{end}}
 
-<div class="container">
-<div id="gallery" class="content">
-  <div id="controls" class="controls"></div>
-  <div class="slideshow-container">
-    <div id="loading" class="loader"></div>
-    <div id="slideshow" class="slideshow"></div>
-  </div>
-  <div id="caption" class="caption-container"></div>
-</div>
+<div id="page">
+	<div class="container">
+		<div id="gallery" class="content">
+		  <div id="controls" class="controls"></div>
+		  <div class="slideshow-container">
+		    <div id="loading" class="loader"></div>
+		    <div id="slideshow" class="slideshow"></div>
+		  </div>
+		  <div id="caption" class="caption-container"></div>
+		</div>
 
-<div id="thumbs" class="navigation">
-    <ul class="thumbs noscript">
-      {{for pic in photos:}}
-        <li>
-            <a class="thumb" name="optionalCustomIdentifier" href="{{=URL('download',args=pic.photo)}}" title="{{=pic.title}}">
-                <img src="{{=URL('download',args=pic.thumbnail)}}" alt="{{=pic.title}}" />
-            </a>
-	    <div class="caption">
-	      <div class="download">
-		<a href="{{=URL('download',args=pic.photo)}}">Download Original</a>
-	      </div>
-	      <div class="image-title">{{=pic.title}}</div>
-	      <div class="image-desc">Description</div>
-	      <div class="star-rating">
-		<b>{{=T('Rate it')}}: </b><s><s><s><s><s><s></s></s></s></s></s></s>
-	      </div>
-	    </div>
-        </li>
-	{{pass}}
-    </ul>
-</div>
+		<div id="thumbs" class="navigation">
+		    <ul class="thumbs noscript">
+		      {{for pic in photos:}}
+		        <li>
+		            <a class="thumb" name="optionalCustomIdentifier" href="{{=URL('download',args=pic.photo)}}" title="{{=pic.title}}">
+		                <img src="{{=URL('download',args=pic.thumbnail)}}" alt="{{=pic.title}}" />
+		            </a>
+			    <div class="caption">
+			      <div class="download">
+				<a href="{{=URL('download',args=pic.photo)}}">Download Original</a>
+			      </div>
+			      <div class="image-title">{{=pic.title}}</div>
+			      <div class="image-desc">Description</div>
+			      <div class="star-rating">
+				<b>{{=T('Rate it')}}: </b><s><s><s><s><s><s></s></s></s></s></s></s>
+			      </div>
+			    </div>
+		        </li>
+			{{pass}}
+		    </ul>
+		</div>
+	</div>
 </div>
 {{block scripts}}
 <script type="text/javascript" src="{{=URL('static', 'js/jquery.galleriffic.js')}}"></script>
