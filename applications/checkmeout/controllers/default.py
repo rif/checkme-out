@@ -8,9 +8,8 @@ def index():
 
 def photos():
     a0 = request.args(0, cast=int, otherwise=URL('index'))
-    photos = db(Photos.user==a0).select(cacheable=True)
-    photo_votes = voter_photos((Photos.user==1) & (Votes.voter==1)).select()
-    user = photos.first().user if len(photos) else db.auth_user(a0)
+    pvs = db(Photos.user==a0).select(left=Votes.on(Photos.id==Votes.photo))
+    user = pvs[0].photo.user if len(pvs) else db.auth_user(a0)
     return locals()
 
 @auth.requires_signature()

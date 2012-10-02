@@ -117,4 +117,4 @@ def calculate_age(row):
 db.auth_user.age = Field.Lazy(calculate_age)
 
 voter_photos = db((db.auth_user.id==Votes.voter) & (Photos.id==Votes.photo))
-#voter_photos = Votes.on(db.auth_user.id==Votes.voter)
+voter_photos_left = Votes.on(db.auth_user.id==Votes.voter)
