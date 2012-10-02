@@ -15,7 +15,7 @@
 				<div id="gallery" class="content">
 					<div id="controls" class="controls"></div>
 					<div class="star-rating">
-				  <b>{{=T('Rate it')}}: </b><s><s><s><s><s><s></s></s></s></s></s></s>
+				  <b>{{=T('Rate it')}}: </b><s><s><s><s><s><s></s></s></s></s></s></s>                  
 				</div>
 					<div class="slideshow-container">
 						<div id="loading" class="loader"></div>
@@ -35,8 +35,14 @@
 									<a href="{{=URL('download',args=pic.photo)}}">Download Original</a>
 								</div>
 								<div class="image-title">{{=pic.title}}</div>
-								<div class="image-desc">Description</div>
-								
+								<div class="image-desc">{{=pic.description}}</div>
+								{{
+                                for v in photo_votes:
+                                  if v.photo.id == pic.id:
+                                    =v.vote.score
+                                  pass
+                                pass
+                                }}
 							</div>
 						</li>
 						{{pass}}
@@ -49,9 +55,8 @@
 <script type="text/javascript" src="{{=URL('static', 'js/jquery.galleriffic.js')}}"></script>
 <script type="text/javascript" src="{{=URL('static', 'js/jquery.opacityrollover.js')}}"></script>
 <script type="text/javascript">
-  <!-- We only want the thunbnails to display when javascript is disabled -->
-  document.write('<style>.noscript { display: none; }</style>');
-  
+  // We only want the thunbnails to display when javascript is disabled
+  document.write('<style>.noscript { display: none; }</style>');  
   $(function() {
        
 
