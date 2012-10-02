@@ -25,7 +25,8 @@
 				</div>
 				<div id="thumbs" class="navigation">
 					<ul class="thumbs noscript">
-						{{for pic in photos:}}
+						{{for pv in pvs:}}
+                        {{pic=pv.photo or ''}}
 						<li>
 							<a class="thumb" name="leaf" href="{{=URL('download',args=pic.photo)}}" title="{{=pic.title}}">
 								<img src="{{=URL('download',args=pic.thumbnail)}}" alt="{{=pic.title}}" />
@@ -36,13 +37,7 @@
 								</div>
 								<div class="image-title">{{=pic.title}}</div>
 								<div class="image-desc">{{=pic.description}}</div>
-								{{
-                                for v in photo_votes:
-                                  if v.photo.id == pic.id:
-                                    =v.vote.score
-                                  pass
-                                pass
-                                }}
+								{{=pv.vote.score}}
 							</div>
 						</li>
 						{{pass}}
